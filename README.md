@@ -1,2 +1,6 @@
-# chrome-omnibox-pubtran
-Search public transport connection from the Chrome omnibox
+## Hledání jízdních řádů přímo z adresního řádku Chrome
+
+### Omezení:
+  - pouze vlak a autobus
+  - pouze pro ČR
+

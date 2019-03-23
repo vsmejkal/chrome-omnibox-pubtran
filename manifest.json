@@ -1,0 +1,16 @@
+{
+  "name": "Jízdní řády",
+  "version": "1.0",
+  "description": "Vyhledávání autobusových a vlakových spojů přímo z adresního řádku.",
+  "omnibox": {
+    "keyword" : "idos"
+  },
+  "permissions": [
+    "geolocation"
+  ],
+  "background": {
+    "page": "background.html",
+    "persistent": false
+  },
+  "manifest_version": 2
+}
