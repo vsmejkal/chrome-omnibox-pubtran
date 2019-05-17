@@ -1,6 +1,6 @@
-## Hledání jízdních řádů přímo z adresního řádku Chrome
+## Hledání jízdních řádů z adresního řádku Chrome
 
 ### Omezení:
-  - pouze vlak a autobus
+  - pouze pro vlaky a autobusy
   - pouze pro ČR
 

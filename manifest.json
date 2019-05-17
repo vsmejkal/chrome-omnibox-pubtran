@@ -12,5 +12,8 @@
     "page": "background.html",
     "persistent": false
   },
+  "web_accessible_resources": [
+    "data/czech-cities.csv"
+  ],
   "manifest_version": 2
 }

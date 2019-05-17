@@ -63,7 +63,7 @@ export default class IdosQuery {
 
   async populateDefaults() {
     if (!this.from) {
-      this.from = await Location.getCurrent();
+      this.from = await Location.getCurrentCity();
     }
   
     if (!this.datetime) {
