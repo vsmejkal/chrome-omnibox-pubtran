@@ -1,26 +1,32 @@
 import IdosQuery from './IdosQuery.js';
 
+chrome.browserAction.onClicked.addListener((tab) =>  {
+  chrome.runtime.reload();
+});
+
 chrome.omnibox.onInputStarted.addListener(() => {
   
 });
 
 chrome.omnibox.onInputChanged.addListener(async (text, suggest) => {
-  const description = IdosQuery.parse(text).toDescription();
+  const query = await IdosQuery.parse(text);
+  const description = query.toDescription();
+
   if (description) {
     chrome.omnibox.setDefaultSuggestion({ description });
   }
 });
 
 chrome.omnibox.onInputEntered.addListener(async (text, disposition) => {
-  const query = IdosQuery.parse(text);
-  await query.populateDefaults();
+  const query = await IdosQuery.parse(text);
+  await query.sanitize();
 
   if (query.isValid()) {
-    openSearchResults(query.toUrl(), disposition);
+    openResultsPage(query.toUrl(), disposition);
   }
 });
 
-function openSearchResults(url, disposition) {
+function openResultsPage(url, disposition) {
   switch (disposition) {
     case 'newForegroundTab':
       chrome.tabs.create({ url });
@@ -35,11 +41,4 @@ function openSearchResults(url, disposition) {
         }
       });
   }
-}
-
-/************ Utilities *************/
-
-async function CityLocator() {
-  
-  //navigator.geolocation.getCurrentPosition(geoSuccess, geoError);
 }

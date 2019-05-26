@@ -5,6 +5,7 @@
   "omnibox": {
     "keyword" : "idos"
   },
+  "browser_action": {},
   "permissions": [
     "geolocation"
   ],

@@ -1,4 +1,5 @@
-import Location from './Location.js'
+import Location from './OfflineLocator.js'
+import StringUtil from './StringUtil.js';
 
 export default class IdosQuery {
   constructor({ from, to, datetime }) {
@@ -61,9 +62,9 @@ export default class IdosQuery {
     return this.from && this.to && this.datetime instanceof Date;
   }
 
-  async populateDefaults() {
+  async sanitize() {
     if (!this.from) {
-      this.from = await Location.getCurrentCity();
+      this.from = await Location.getCity();
     }
   
     if (!this.datetime) {
@@ -71,15 +72,15 @@ export default class IdosQuery {
     }
   }
 
-  static parse(text) {
-    let tokens = text.trim().split(/\s+/);
+  static async parse(text) {
+    const tokens = text.trim().split(/\s+/);
 
-    let time = parseTime(tokens.slice(-1)[0] || '');
+    const time = parseTime(tokens.slice(-1)[0] || '');
     if (time) {
       tokens.pop();
     }
 
-    let date = parseDate(tokens.slice(-1)[0] || '');
+    const date = parseDate(tokens.slice(-1)[0] || '');
     if (date) {
       tokens.pop();
     }
@@ -89,26 +90,26 @@ export default class IdosQuery {
       date.setMinutes(time.minute);
     }
 
-    let to = tokens.pop() || null;
-    let from = tokens.pop() || null;
-    let datetime = date;
+    const to = tokens.pop() || null;
+    const from = tokens.pop() || null;
+    const datetime = date;
 
     return new IdosQuery({ from, to, datetime });
   }
 }
 
 function getToday() {
-  let now = new Date();
+  const now = new Date();
 
   return new Date(now.getFullYear(), now.getMonth(), now.getDate(), 6, 0);
 }
 
 function parseDate(text) {
   const DAY = 24 * 60 * 60 * 1000;
-  let today = getToday().getTime();
-  let daysAhead = day => (day - new Date().getDay() + 7) % 7;
+  const today = getToday().getTime();
+  const daysAhead = day => (day - new Date().getDay() + 7) % 7;
 
-  switch (normalized(text)) {
+  switch (StringUtil.normalize(text)) {
     case 'dnes':
       return new Date();
     case 'zitra':
@@ -131,20 +132,20 @@ function parseDate(text) {
       return new Date(today + daysAhead(7) * DAY);
   }
 
-  let nums = text.match(/\d+/g);
+  const nums = text.match(/\d+/g);
   if (!nums) {
     return null;
   }
 
-  let day = parseInt(nums[0]);
-  let month = parseInt(nums[1]) || new Date().getMonth() + 1;
-  let year = new Date().getFullYear();
+  const day = parseInt(nums[0]);
+  const month = parseInt(nums[1]) || new Date().getMonth() + 1;
+  const year = new Date().getFullYear();
 
   return new Date(year, month - 1, day);
 }
 
 function parseTime(text) {
-  switch (normalized(text)) {
+  switch (StringUtil.normalize(text)) {
     case 'rano':
       return { hour: 6, minute: 0 };
     case 'dopoledne':
@@ -155,17 +156,13 @@ function parseTime(text) {
       return { hour: 16, minute: 0 };
   }
 
-  let nums = text.match(/\d+/g)
+  const nums = text.match(/\d+/g)
   if (!nums) {
     return null;
   }
 
-  let hour = parseInt(nums[0]);
-  let minute = parseInt(nums[1]) || 0;
+  const hour = parseInt(nums[0]);
+  const minute = parseInt(nums[1]) || 0;
 
   return  { hour, minute };
-}
-
-function normalized(string) {
-  return string.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 }
