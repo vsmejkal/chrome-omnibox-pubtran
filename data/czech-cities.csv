@@ -692,7 +692,7 @@ Cvrčovice,Kladno,50.179896,14.154895
 Česká Skalice,Náchod,50.394767,16.042868
 Česká Třebová,Ústí nad Orlicí,49.901982,16.447385
 Česká Ves,Jeseník,50.257454,17.228153
-ČESKÉ BUDĚJOVICE,České Budějovice,48.975758,14.480355
+České Budějovice,České Budějovice,48.975758,14.480355
 České Heřmanice,Ústí nad Orlicí,49.931529,16.253203
 České Lhotice,Chrudim,49.847036,15.777938
 České Libchavy,Ústí nad Orlicí,50.029927,16.371803
@@ -765,7 +765,7 @@ Dašice,Pardubice,50.028543,15.912545
 Davle,Praha-západ,49.892280,14.400478
 Deblín,Brno-venkov,49.320459,16.346542
 Děčany,Litoměřice,50.438699,13.908578
-DĚČÍN,Děčín,50.772656,14.212861
+Děčín,Děčín,50.772656,14.212861
 Dědice,Třebíč,49.029803,15.727855
 Dědová,Chrudim,49.761203,15.986569
 Dehtáře,Pelhřimov,49.486202,15.275386
@@ -1109,7 +1109,7 @@ Františkov nad Ploučnicí,Děčín,50.725809,14.327018
 Františkovy Lázně,Cheb,50.120159,12.349781
 Frenštát pod Radhoštěm,Nový Jičín,49.548445,18.210890
 Fryčovice,Frýdek-Místek,49.666867,18.223315
-FRÝDEK-MÍSTEK,Frýdek-Místek,49.682031,18.367422
+Frýdek-Místek,Frýdek-Místek,49.682031,18.367422
 Frýdlant,Liberec,50.921496,15.079851
 Frýdlant nad Ostravicí,Frýdek-Místek,49.591902,18.358605
 Frýdštejn,Jablonec nad Nisou,50.652357,15.158867
@@ -1164,7 +1164,7 @@ Hartvíkovice,Třebíč,49.171199,16.090438
 Haškovcova Lhota,Tábor,49.332597,14.466726
 Hať,Opava,49.946540,18.239420
 Hatín,Jindřichův Hradec,49.108751,14.911134
-HAVÍŘOV,Karviná,49.780492,18.430725
+Havířov,Karviná,49.780492,18.430725
 Havlíčkova Borová,Havlíčkův Brod,49.635883,15.781671
 Havlíčkův Brod,Havlíčkův Brod,49.604436,15.579755
 Havlovice,Trutnov,50.487625,16.029428
@@ -1466,7 +1466,7 @@ Hradčany-Kobeřice,Prostějov,49.364185,17.128429
 Hradčovice,Uherské Hradiště,49.049868,17.582201
 Hradec,Havlíčkův Brod,49.707329,15.295565
 Hradec,Plzeň-jih,49.635159,13.121483
-HRADEC KRÁLOVÉ,Hradec Králové,50.210461,15.825311
+Hradec Králové,Hradec Králové,50.210461,15.825311
 Hradec nad Moravicí,Opava,49.871107,17.875924
 Hradec nad Svitavou,Svitavy,49.711530,16.480687
 Hradec-Nová Ves,Jeseník,50.283247,17.281327
@@ -1997,7 +1997,7 @@ Karlovy Vary,Karlovy Vary,50.231952,12.872062
 Karlštejn,Beroun,49.939604,14.188146
 Karolín,Kroměříž,49.230694,17.434610
 Karolinka,Vsetín,49.351376,18.240174
-KARVINÁ,Karviná,49.856752,18.543319
+Karviná,Karviná,49.856752,18.543319
 Kařez,Rokycany,49.824356,13.781719
 Kařízek,Rokycany,49.813466,13.799741
 Kasalice,Pardubice,50.118105,15.609768
@@ -3863,7 +3863,7 @@ Ploskovice,Litoměřice,50.560340,14.198588
 Pluhův Žďár,Jindřichův Hradec,49.223995,14.892803
 Plumlov,Prostějov,49.466236,17.015122
 Plužná,Mladá Boleslav,50.473807,14.804269
-PLZEŇ,Plzeň-město,49.738531,13.373737
+Plzeň,Plzeň-město,49.738531,13.373737
 Pnětluky,Louny,50.250358,13.703895
 Pňovany,Plzeň-sever,49.778992,13.121864
 Pňovice,Olomouc,49.721386,17.161923
@@ -4037,7 +4037,7 @@ Prosetín,Žďár nad Sázavou,49.526397,16.394946
 Prosetín,Chrudim,49.833121,15.957751
 Prosíčka,Havlíčkův Brod,49.724592,15.323639
 Prosiměřice,Znojmo,48.902803,16.192067
-PROSTĚJOV,Prostějov,49.472549,17.106851
+Prostějov,Prostějov,49.472549,17.106851
 Prostějovičky,Prostějov,49.427632,16.997349
 Prostiboř,Tachov,49.652373,12.893990
 Prostřední Bečva,Vsetín,49.436192,18.252106
@@ -4086,7 +4086,7 @@ Přepeře,Semily,50.583032,15.112901
 Přepeře,Mladá Boleslav,50.467724,15.101992
 Přepychy,Rychnov nad Kněžnou,50.235959,16.106634
 Přepychy,Pardubice,50.106455,15.519991
-PŘEROV,Přerov,49.456579,17.450330
+Přerov,Přerov,49.456579,17.450330
 Přerov nad Labem,Nymburk,50.160370,14.825129
 Přerubenice,Rakovník,50.217271,13.841132
 Přeskače,Znojmo,49.012530,16.107001
@@ -5450,7 +5450,7 @@ Určice,Prostějov,49.430551,17.073015
 Ústí,Jihlava,49.473620,15.414883
 Ústí,Přerov,49.516945,17.766477
 Ústí,Vsetín,49.308336,18.003211
-ÚSTÍ NAD LABEM,Ústí nad Labem,50.661216,14.053246
+Ústí nad Labem,Ústí nad Labem,50.661216,14.053246
 Ústí nad Orlicí,Ústí nad Orlicí,49.972280,16.399762
 Ústín,Olomouc,49.587135,17.157685
 Ústrašice,Tábor,49.340380,14.684580
@@ -6107,7 +6107,7 @@ Zlaté Hory,Jeseník,50.263894,17.396122
 Zlátenka,Pelhřimov,49.423554,15.058658
 Zlatníky-Hodkovice,Praha-západ,49.960627,14.480805
 Zlechov,Uherské Hradiště,49.074059,17.379491
-ZLÍN,Zlín,49.224537,17.662863
+Zlín,Zlín,49.224537,17.662863
 Zliv,České Budějovice,49.066188,14.366234
 Zlobice,Kroměříž,49.301917,17.312714
 Zlončice,Mělník,50.228883,14.357680

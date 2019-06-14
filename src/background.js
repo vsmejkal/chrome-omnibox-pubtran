@@ -10,11 +10,16 @@ chrome.omnibox.onInputStarted.addListener(() => {
 
 chrome.omnibox.onInputChanged.addListener(async (text, suggest) => {
   const query = await IdosQuery.parse(text);
-  const description = query.toDescription();
+  // const description = query.toDescription();
 
-  if (description) {
-    chrome.omnibox.setDefaultSuggestion({ description });
-  }
+  suggest([
+    { content: "http://reddit.com/r/" + text, description: "reddit.com/r/" + text },
+    { content: "http://imgur.com/r/" + text, description: "imgur.com/r/" + text }
+  ]);
+
+  // if (description) {
+  //   chrome.omnibox.setDefaultSuggestion({ description });
+  // }
 });
 
 chrome.omnibox.onInputEntered.addListener(async (text, disposition) => {

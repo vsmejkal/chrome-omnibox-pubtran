@@ -1,4 +1,4 @@
-import Cities from './Cities.js'
+import City from './City.js'
 
 const latestPosition = {
   value: null,
@@ -16,7 +16,6 @@ export default {
       navigator.geolocation.getCurrentPosition(({ coords }) => {
         latestPosition.value = coords;
         latestPosition.stamp = new Date();
-
         resolve(coords);
       })
     );
@@ -24,7 +23,7 @@ export default {
 
   async getCity() {
     const position = await this.getPosition();
-    const city = await Cities.findNearest(position);
+    const city = await City.findNearest(position);
     
     return city.name;
   }

@@ -1,5 +1,6 @@
-import Location from './OfflineLocator.js'
+import Locator from './Locator.js';
 import StringUtil from './StringUtil.js';
+import CityParser from './parser/CityParser.js';
 
 export default class IdosQuery {
   constructor({ from, to, datetime }) {
@@ -72,8 +73,11 @@ export default class IdosQuery {
     }
   }
 
-  static async parse(text) {
+  /*static async parse(text) {
     const tokens = text.trim().split(/\s+/);
+    const query = tokens.join(' ')
+
+    console.log((await CityParser(query)).map(String))
 
     const time = parseTime(tokens.slice(-1)[0] || '');
     if (time) {
@@ -95,74 +99,5 @@ export default class IdosQuery {
     const datetime = date;
 
     return new IdosQuery({ from, to, datetime });
-  }
-}
-
-function getToday() {
-  const now = new Date();
-
-  return new Date(now.getFullYear(), now.getMonth(), now.getDate(), 6, 0);
-}
-
-function parseDate(text) {
-  const DAY = 24 * 60 * 60 * 1000;
-  const today = getToday().getTime();
-  const daysAhead = day => (day - new Date().getDay() + 7) % 7;
-
-  switch (StringUtil.normalize(text)) {
-    case 'dnes':
-      return new Date();
-    case 'zitra':
-      return new Date(today + DAY);
-    case 'vcera':
-      return new Date(today - DAY);
-    case 'pondeli':
-      return new Date(today + daysAhead(1) * DAY);
-    case 'utery':
-      return new Date(today + daysAhead(2) * DAY);
-    case 'streda':
-      return new Date(today + daysAhead(3) * DAY);
-    case 'ctvrtek':
-      return new Date(today + daysAhead(4) * DAY);
-    case 'patek':
-      return new Date(today + daysAhead(5) * DAY);
-    case 'sobota':
-      return new Date(today + daysAhead(6) * DAY);
-    case 'nedele':
-      return new Date(today + daysAhead(7) * DAY);
-  }
-
-  const nums = text.match(/\d+/g);
-  if (!nums) {
-    return null;
-  }
-
-  const day = parseInt(nums[0]);
-  const month = parseInt(nums[1]) || new Date().getMonth() + 1;
-  const year = new Date().getFullYear();
-
-  return new Date(year, month - 1, day);
-}
-
-function parseTime(text) {
-  switch (StringUtil.normalize(text)) {
-    case 'rano':
-      return { hour: 6, minute: 0 };
-    case 'dopoledne':
-      return { hour: 8, minute: 0 };
-    case 'odpoledne':
-      return { hour: 12, minute: 0 };
-    case 'vecer':
-      return { hour: 16, minute: 0 };
-  }
-
-  const nums = text.match(/\d+/g)
-  if (!nums) {
-    return null;
-  }
-
-  const hour = parseInt(nums[0]);
-  const minute = parseInt(nums[1]) || 0;
-
-  return  { hour, minute };
+  }*/
 }
