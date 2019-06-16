@@ -1,10 +1,6 @@
 import City from '../City.js';
-import StringUtil from '../StringUtil.js';
 
-
-export default async function parseCity(query) {
-    query = StringUtil.normalize(query)
-
+export default async function parseCities(query) {
     if (query.length < 2) {
         return [];
     }

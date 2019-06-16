@@ -1,18 +1,6 @@
 const DAY = 24 * 60 * 60 * 1000;
 
-function getToday() {
-  const now = new Date();
-
-  return new Date(now.getFullYear(), now.getMonth(), now.getDate(), 6, 0).getTime();
-}
-
-function getDaysAhead(dayOfWeek) {
-  return DAY * ((dayOfWeek - new Date().getDay() + 7) % 7);
-}
-  
-export default function parseDate(query) {
-  query = StringUtil.normalize(query);
-  
+export default async function parseDate(query) {
   switch (query) {
     case 'dnes':
       return new Date();
@@ -36,14 +24,28 @@ export default function parseDate(query) {
       return new Date(getToday() + getDaysAhead(7));
   }
 
-  const date = query.match(/^(\d+)[\.\/](\d*)\.?$/);
-  const day = parseInt(date[1]);
-  const month = parseInt(date[2]) || new Date().getMonth() + 1;
+  const match = query.match(/^(\d+)[\.\/](\d*)\.?$/);
+  if (!match) {
+    return null;
+  }
+  
+  const day = parseInt(match[1]);
+  const month = parseInt(match[2]) || new Date().getMonth() + 1;
   const year = new Date().getFullYear();
 
-  if (!date || day < 1 || day > 31 || month < 1 || month > 12) {
+  if (day < 1 || day > 31 || month < 1 || month > 12) {
     return null;
   }
 
   return { day, month, year };
+}
+
+function getToday() {
+  const now = new Date();
+
+  return new Date(now.getFullYear(), now.getMonth(), now.getDate(), 6, 0).getTime();
+}
+
+function getDaysAhead(dayOfWeek) {
+  return DAY * ((dayOfWeek - new Date().getDay() + 7) % 7);
 }

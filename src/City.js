@@ -5,7 +5,7 @@ import Locator from "./Locator.js";
 let _cities;
 
 export default class City {
-  constructor({id,name, area, latitude, longitude}) {
+  constructor({id, name, area, latitude, longitude}) {
     this.id = id;
     this.name = name;
     this.area = area;
@@ -35,7 +35,7 @@ export default class City {
   }
 
   static async findNearest(position) {
-    const cities = await this.getAll()
+    const cities = await City.getAll()
     const dists = cities.map(city => squareDistance(city, position))
 
     return cities.reduce((cityA, cityB) =>
@@ -44,9 +44,9 @@ export default class City {
   }
 
   static async search(query) {
-    const cities = await this.getAll();
-    const location = await Locator.getPosition();
-    const pattern = new RegExp('\\b' + StringUtil.normalize(query));
+    const cities = await City.getAll();
+    // const location = await Locator.getPosition();
+    const pattern = new RegExp('\\b' + query);
     const scores = cities.map(getScore);
 
     return cities

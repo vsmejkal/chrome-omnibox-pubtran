@@ -1,30 +1,37 @@
-import City from './City.js'
+import City from "./City.js"
 
-const latestPosition = {
-  value: null,
-  stamp: new Date(0)
+const cachedPosition = {
+  _value: null,
+  _stamp: new Date(0),
+
+  get isValid() {
+    return (new Date() - this._stamp) < 10 * 60 * 1000; // 10 min
+  },
+  get value() {
+    return this._value;
+  },
+  set value (position) {
+    this._value = position;
+    this._stamp = new Date();
+  }
 };
 
 export default {
-  async getPosition() {
-    // Latest position is not older than 10 minutes
-    if (new Date() - latestPosition.stamp < 10 * 60 * 1000) {
-      return latestPosition.value;
-    }
+  async fetchPosition() {
+    return new Promise((resolve, reject) => {
+      const onSuccess = ({ coords }) => resolve(coords);
+      const onError = reject;
+      const options = { timeout: 1000 };
 
-    return new Promise(resolve => 
-      navigator.geolocation.getCurrentPosition(({ coords }) => {
-        latestPosition.value = coords;
-        latestPosition.stamp = new Date();
-        resolve(coords);
-      })
-    );
+      navigator.geolocation.getCurrentPosition(onSuccess, onError, options);
+    });
   },
 
-  async getCity() {
-    const position = await this.getPosition();
-    const city = await City.findNearest(position);
-    
-    return city.name;
+  async getPosition() {
+    if (!cachedPosition.isValid) {
+      cachedPosition.value = await this.fetchPosition();
+    }
+
+    return cachedPosition.value;
   }
 }

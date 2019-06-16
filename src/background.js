@@ -1,4 +1,5 @@
 import IdosQuery from './IdosQuery.js';
+import parseQuery from './parser/QueryParser.js';
 
 chrome.browserAction.onClicked.addListener((tab) =>  {
   chrome.runtime.reload();
@@ -9,13 +10,14 @@ chrome.omnibox.onInputStarted.addListener(() => {
 });
 
 chrome.omnibox.onInputChanged.addListener(async (text, suggest) => {
-  const query = await IdosQuery.parse(text);
+  const result = await parseQuery(text);
+  console.log(result);
   // const description = query.toDescription();
 
-  suggest([
-    { content: "http://reddit.com/r/" + text, description: "reddit.com/r/" + text },
-    { content: "http://imgur.com/r/" + text, description: "imgur.com/r/" + text }
-  ]);
+  // suggest([
+  //   { content: "http://reddit.com/r/" + text, description: "reddit.com/r/" + text },
+  //   { content: "http://imgur.com/r/" + text, description: "imgur.com/r/" + text }
+  // ]);
 
   // if (description) {
   //   chrome.omnibox.setDefaultSuggestion({ description });
