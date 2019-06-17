@@ -31,13 +31,16 @@ export default async function parseDate(query) {
   
   const day = parseInt(match[1]);
   const month = parseInt(match[2]) || new Date().getMonth() + 1;
-  const year = new Date().getFullYear();
 
   if (day < 1 || day > 31 || month < 1 || month > 12) {
     return null;
   }
 
-  return { day, month, year };
+  const result = new Date();
+  result.setDate(day);
+  result.setMonth(month - 1);
+
+  return result;
 }
 
 function getToday() {

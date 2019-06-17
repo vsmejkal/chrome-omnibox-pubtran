@@ -19,8 +19,16 @@ const cachedPosition = {
 export default {
   async fetchPosition() {
     return new Promise((resolve, reject) => {
-      const onSuccess = ({ coords }) => resolve(coords);
-      const onError = reject;
+      const onSuccess = ({ coords }) => {
+        resolve(coords);
+      };
+      const onError = (error) => {
+        if (cachedPosition.value) {
+          resolve(cachedPosition.value);
+        } else {
+          reject(error);
+        }
+      };
       const options = { timeout: 1000 };
 
       navigator.geolocation.getCurrentPosition(onSuccess, onError, options);

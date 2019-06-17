@@ -4,3 +4,5 @@
   - pouze pro vlaky a autobusy
   - pouze pro ČR
 
+### Testování:
+  - otevřít chrome-extension://EXTENSION_ID/tests.html

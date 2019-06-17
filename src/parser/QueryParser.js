@@ -15,11 +15,13 @@ export default async function parseQuery(query) {
   
   const from = await scanner.getNext(parseCities);
   if (from) {
+    console.log('From', from.map(String));
     result.from = from[0];
   }
 
   const to = await scanner.getNext(parseCities);
   if (to) {
+    console.log('To', to.map(String));
     result.to = to[0];
   }
 
