@@ -1,4 +1,8 @@
 export default async function parseTime(query) {
+  return parseRelativeTime(query) || parseNumericTime(query);
+}
+
+function parseRelativeTime(query) {
   switch (query) {
     case 'rano':
       return { hour: 6, minute: 0 };
@@ -8,9 +12,14 @@ export default async function parseTime(query) {
       return { hour: 12, minute: 0 };
     case 'vecer':
       return { hour: 16, minute: 0 };
+    default:
+      return null;
   }
+}
 
-  const match = query.match(/^(\d+)(?:h|\:(\d\d))?$/)
+function parseNumericTime(query) {
+  const pattern = /^(?:ve?\s)?(\d\d?)(?:\:(\d\d))?\s?(?:h|hod|hodin)?$/
+  const match = query.match(pattern);
   if (!match) {
     return null;
   }

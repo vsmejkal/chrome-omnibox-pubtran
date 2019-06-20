@@ -1,9 +1,11 @@
 import TimeParser from "./TimeParser.test.js"
 import DateParser from "./DateParser.test.js"
+import CityParser from "./CityParser.test.js"
 
 runTests({
   DateParser,
-  TimeParser
+  TimeParser,
+  CityParser
 });
 
 // ---
@@ -36,5 +38,5 @@ function printResult(suiteName, testName, result) {
     result = `<strong style="color:red;">FAIL</strong>`
   }
 
-  document.body.innerHTML += `${suiteName} . ${testName} ... ${result}<br>`;
+  document.body.innerHTML += `${result} ... ${suiteName} . ${testName}<br>`;
 }

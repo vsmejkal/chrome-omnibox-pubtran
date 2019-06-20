@@ -1,29 +1,80 @@
 const DAY = 24 * 60 * 60 * 1000;
 
 export default async function parseDate(query) {
+  let date = parseRelativeDate(query) || parseNumericDate(query);
+
+  if (isValidDate(date)) {
+    return date;
+  } else {
+    return null;
+  }
+}
+
+function parseRelativeDate(query) {
+  const now = Date.now()
+  const dayOfWeek = new Date().getDay()
+  let timestamp;
+
   switch (query) {
     case 'dnes':
-      return new Date();
+      timestamp = now;
+      break;
+
     case 'zitra':
-      return new Date(getToday() + DAY);
+      timestamp = now + DAY;
+      break;
+
     case 'vcera':
-      return new Date(getToday() - DAY);
-    case 'pondeli':
-      return new Date(getToday() + getDaysAhead(1));
-    case 'utery':
-      return new Date(getToday() + getDaysAhead(2));
-    case 'streda':
-      return new Date(getToday() + getDaysAhead(3));
-    case 'ctvrtek':
-      return new Date(getToday() + getDaysAhead(4));
-    case 'patek':
-      return new Date(getToday() + getDaysAhead(5));
-    case 'sobota':
-      return new Date(getToday() + getDaysAhead(6));
+      timestamp = now - DAY;
+      break;
+
     case 'nedele':
-      return new Date(getToday() + getDaysAhead(7));
+    case 'v nedeli':
+      timestamp = now + DAY * ((0 - dayOfWeek + 7) % 7);
+      break;
+
+    case 'pondeli':
+    case 'v pondeli':
+      timestamp = now + DAY * ((1 - dayOfWeek + 7) % 7);
+      break;
+
+    case 'utery':
+    case 'v utery':
+      timestamp = now + DAY * ((2 - dayOfWeek + 7) % 7);
+      break;
+
+    case 'streda':
+    case 've stredu':
+      timestamp = now + DAY * ((3 - dayOfWeek + 7) % 7);
+      break;
+
+    case 'ctvrtek':
+    case 've ctvrtek':
+      timestamp = now + DAY * ((4 - dayOfWeek + 7) % 7);
+      break;
+
+    case 'patek':
+    case 'v patek':
+      timestamp = now + DAY * ((5 - dayOfWeek + 7) % 7);
+      break;
+
+    case 'sobota':
+    case 'v sobotu':
+      timestamp = now + DAY * ((6 - dayOfWeek + 7) % 7);
+      break;
+
+    default:
+      return null;
   }
 
+  const date = new Date(timestamp);
+  const day = date.getDate();
+  const month = date.getMonth() + 1;
+
+  return {day, month};
+}
+
+function parseNumericDate(query) {
   const match = query.match(/^(\d+)[\.\/](\d*)\.?$/);
   if (!match) {
     return null;
@@ -32,23 +83,13 @@ export default async function parseDate(query) {
   const day = parseInt(match[1]);
   const month = parseInt(match[2]) || new Date().getMonth() + 1;
 
-  if (day < 1 || day > 31 || month < 1 || month > 12) {
-    return null;
-  }
-
-  const result = new Date();
-  result.setDate(day);
-  result.setMonth(month - 1);
-
-  return result;
+  return {day, month};
 }
 
-function getToday() {
-  const now = new Date();
+function isValidDate({day, month}) {
+  const date = new Date();
+  date.setMonth(month - 1);
+  date.setDate(day);
 
-  return new Date(now.getFullYear(), now.getMonth(), now.getDate(), 6, 0).getTime();
-}
-
-function getDaysAhead(dayOfWeek) {
-  return DAY * ((dayOfWeek - new Date().getDay() + 7) % 7);
+  return date.getDate() === day && date.getMonth() + 1 === month;
 }

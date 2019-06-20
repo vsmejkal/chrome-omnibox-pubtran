@@ -19,6 +19,10 @@ export default class City {
   }
 
   static async getAll() {
+    if (!_cities) {
+      _cities = City.loadAll(Config.CITY_DATASET);
+    }
+
     return _cities;
   }
   
@@ -27,7 +31,7 @@ export default class City {
     const response = await fetch(url);
     const data = await response.text();
     
-    _cities = data.split('\n').filter(StringUtil.isNotEmpty).slice(1).map((line, id) => {
+    return data.split('\n').filter(StringUtil.isNotEmpty).slice(1).map((line, id) => {
       const [name, area, latitude, longitude] = line.split(',');
       
       return new City({ id, name, area, latitude, longitude });
@@ -71,5 +75,3 @@ export default class City {
 function squareDistance(gpsA, gpsB) {
   return Math.pow(gpsA.latitude - gpsB.latitude, 2) + Math.pow(gpsA.longitude - gpsB.longitude, 2);
 }
-
-City.loadAll(Config.CITY_DATASET);
