@@ -13,26 +13,26 @@ export default async function parseQuery(query) {
 
   const scanner = queryScanner(query);
   
-  const from = await scanner.getNext(parseCities);
+  const from = await scanner.scan(parseCities);
   if (from) {
     console.log('From', from.map(String));
     result.from = from[0];
   }
 
-  const to = await scanner.getNext(parseCities);
+  const to = await scanner.scan(parseCities);
   if (to) {
     console.log('To', to.map(String));
     result.to = to[0];
   }
 
-  const date = await scanner.getNext(parseDate);
+  const date = await scanner.scan(parseDate);
   if (date) {
-    result.date.setFullYear(date.year, date.month, date.day);
+    result.date.setFullYear(date.year, date.month - 1, date.day);
   }
 
-  const time = await scanner.getNext(parseTime);
+  const time = await scanner.scan(parseTime);
   if (time) {
-    result.date.setHours(time.hour, time.minute);
+    result.date.setHours(time.hour, time.minute, 0, 0);
   }
   
   if (result.from && !result.to) {
@@ -48,7 +48,7 @@ function queryScanner(query) {
   let start = 0, end;
 
   return {
-    async getNext(parseResult) {
+    async scan(parseResult) {
       let result = null;
 
       for (end = start + 1; end <= tokens.length; end++) {

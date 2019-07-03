@@ -1,18 +1,18 @@
 const DAY = 24 * 60 * 60 * 1000;
 
 export default async function parseDate(query) {
-  let date = parseRelativeDate(query) || parseNumericDate(query);
+  let date = parseHumanDate(query) || parseNumericDate(query);
 
-  if (isValidDate(date)) {
+  if (date && isValidDate(date)) {
     return date;
   } else {
     return null;
   }
 }
 
-function parseRelativeDate(query) {
-  const now = Date.now()
-  const dayOfWeek = new Date().getDay()
+export function parseHumanDate(query) {
+  let now = Date.now()
+  let dayOfWeek = new Date().getDay()
   let timestamp;
 
   switch (query) {
@@ -67,29 +67,39 @@ function parseRelativeDate(query) {
       return null;
   }
 
-  const date = new Date(timestamp);
-  const day = date.getDate();
-  const month = date.getMonth() + 1;
+  let date = new Date(timestamp);
+  let day = date.getDate();
+  let month = date.getMonth() + 1;
+  let year = date.getFullYear();
 
-  return {day, month};
+  // Turn of the year
+  if (date.getMonth() < new Date().getMonth()) {
+    year++;
+  }
+
+  return {day, month, year};
 }
 
 function parseNumericDate(query) {
-  const match = query.match(/^(\d+)[\.\/](\d*)\.?$/);
+  let match = query.match(/^(\d+)[\.\/](\d*)\.?$/);
   if (!match) {
     return null;
   }
   
-  const day = parseInt(match[1]);
-  const month = parseInt(match[2]) || new Date().getMonth() + 1;
+  let day = parseInt(match[1]);
+  let month = parseInt(match[2]) || new Date().getMonth() + 1;
+  let year = new Date().getFullYear();
 
-  return {day, month};
+  return {day, month, year};
 }
 
-function isValidDate({day, month}) {
+function isValidDate({day, month, year}) {
   const date = new Date();
+  date.setFullYear(year);
   date.setMonth(month - 1);
   date.setDate(day);
 
-  return date.getDate() === day && date.getMonth() + 1 === month;
+  return date.getDate() === day &&
+         date.getMonth() + 1 === month &&
+         date.getFullYear() === year;
 }

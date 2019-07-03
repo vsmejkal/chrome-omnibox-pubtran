@@ -1,14 +1,16 @@
 import TimeParser from "./TimeParser.test.js"
 import DateParser from "./DateParser.test.js"
 import CityParser from "./CityParser.test.js"
+import QueryParser from "./QueryParser.test.js"
 
 runTests({
   DateParser,
   TimeParser,
-  CityParser
+  CityParser,
+  QueryParser
 });
 
-// ---
+// ----------------------------------------------------
 
 async function runTests(testSuites) {
   for (let suiteName in testSuites) {
@@ -32,11 +34,11 @@ async function executeTest(testMethod) {
 
 function printResult(suiteName, testName, result) {
   if (result === true) {
-    result = `<strong style="color:green;">OK</strong>`
+    result = `<strong style="color:green;">OK</strong> ...`
   }
   if (result === false) {
-    result = `<strong style="color:red;">FAIL</strong>`
+    result = `<strong style="color:red;">FAIL</strong> .`
   }
 
-  document.body.innerHTML += `${result} ... ${suiteName} . ${testName}<br>`;
+  document.body.innerHTML += `${result} ${suiteName}.${testName}<br>`;
 }

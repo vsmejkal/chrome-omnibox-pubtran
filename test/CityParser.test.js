@@ -2,14 +2,14 @@ import parseCities from "../src/parser/CityParser.js";
 
 export default {
   async incompleteName() {
-    const cities = await parseCities("lansk")
+    const cities = await parseCities("lansk");
 
-    return cities.some(city => city.name === "Lanškroun")
+    return cities.some(city => city.name === "Lanškroun");
   },
 
-  async startingInMiddle() {
-    const cities = await parseCities("trebov")
+  async startInTheMiddle() {
+    const cities = await parseCities("trebov");
 
-    return cities.some(city => city.name === "Česká Třebová")
+    return cities.some(city => city.name === "Česká Třebová");
   }
 };
