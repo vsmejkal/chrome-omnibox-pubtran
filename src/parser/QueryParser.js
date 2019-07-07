@@ -5,46 +5,44 @@ import StringUtil from "../StringUtil.js";
 
 
 export default async function parseQuery(query) {
-  const result = {
-    from: null,
-    to: null,
+  let result = {
+    from: [],
+    to: [],
     date: new Date()
   };
 
-  const scanner = queryScanner(query);
+  let scanner = Scanner(query);
   
-  const from = await scanner.scan(parseCities);
+  let from = await scanner.scan(parseCities);
   if (from) {
-    console.log('From', from.map(String));
-    result.from = from[0];
+    result.from = from;
   }
 
-  const to = await scanner.scan(parseCities);
+  let to = await scanner.scan(parseCities);
   if (to) {
-    console.log('To', to.map(String));
-    result.to = to[0];
+    result.to = to;
   }
 
-  const date = await scanner.scan(parseDate);
+  let date = await scanner.scan(parseDate);
   if (date) {
     result.date.setFullYear(date.year, date.month - 1, date.day);
   }
 
-  const time = await scanner.scan(parseTime);
+  let time = await scanner.scan(parseTime);
   if (time) {
     result.date.setHours(time.hour, time.minute, 0, 0);
   }
   
-  if (result.from && !result.to) {
+  if (result.to.length === 0) {
     result.to = result.from;
-    result.from = null;
+    result.from = [];
   }
 
   return result;
 }
 
-function queryScanner(query) {
-  const tokens = StringUtil.normalize(query).split(/\s+/);
+function Scanner(text) {
+  let tokens = StringUtil.normalize(text).split(/\s+/);
   let start = 0, end;
 
   return {
@@ -52,8 +50,8 @@ function queryScanner(query) {
       let result = null;
 
       for (end = start + 1; end <= tokens.length; end++) {
-        const phrase = tokens.slice(start, end).join(' ');
-        const value = await parseResult(phrase);
+        let phrase = tokens.slice(start, end).join(' ');
+        let value = await parseResult(phrase);
 
         if (value && !isEmptyArray(value)) {
           result = value;
@@ -63,7 +61,6 @@ function queryScanner(query) {
       }
 
       start = end - 1;
-
       return result;
     }
   };

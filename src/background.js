@@ -10,8 +10,8 @@ chrome.omnibox.onInputStarted.addListener(() => {
 });
 
 chrome.omnibox.onInputChanged.addListener(async (text, suggest) => {
-  const result = await parseQuery(text);
-  console.log(result);
+  
+
   // const description = query.toDescription();
 
   // suggest([
@@ -38,9 +38,11 @@ function openResultsPage(url, disposition) {
     case 'newForegroundTab':
       chrome.tabs.create({ url });
       break;
+
     case 'newBackgroundTab':
       chrome.tabs.create({ url, active: false });
       break;
+
     default:
       chrome.tabs.query({ active: true }, ([tab]) => {
         if (tab) {
@@ -49,3 +51,4 @@ function openResultsPage(url, disposition) {
       });
   }
 }
+

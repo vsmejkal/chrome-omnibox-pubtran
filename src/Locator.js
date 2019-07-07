@@ -4,7 +4,7 @@ const cachedPosition = {
   _value: null,
   _stamp: new Date(0),
 
-  get isValid() {
+  get isFresh() {
     return (new Date() - this._stamp) < 10 * 60 * 1000; // 10 min
   },
   get value() {
@@ -36,7 +36,7 @@ export default {
   },
 
   async getPosition() {
-    if (!cachedPosition.isValid) {
+    if (!cachedPosition.isFresh) {
       cachedPosition.value = await this.fetchPosition();
     }
 

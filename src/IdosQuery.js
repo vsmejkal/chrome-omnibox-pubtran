@@ -1,6 +1,18 @@
 import Locator from './Locator.js';
 import StringUtil from './StringUtil.js';
-import CityParser from './parser/CityParser.js';
+import parseQuery from './parser/QueryParser.js';
+
+export default {
+  async parse(text) {
+    let result = await parseQuery(text);
+
+    if (!validateResult(result)) {
+      return [];
+    }
+
+    return createSuggestions(result);
+  }
+};
 
 export default class IdosQuery {
   constructor({ from, to, datetime }) {
@@ -9,28 +21,28 @@ export default class IdosQuery {
     this.datetime = datetime;
   }
 
-  getDateString() {
-    const day = this.datetime.getDate();
-    const month = this.datetime.getMonth() + 1;
-    const year = this.datetime.getFullYear();
+  getDateString(date) {
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
 
     return `${day}.${month}.${year}`;
   }
 
-  getTimeString() {
-    const hour = this.datetime.getHours();
-    const minute = this.datetime.getMinutes();
+  getTimeString(date) {
+    const hour = date.getHours();
+    const minute = date.getMinutes();
 
     return `${hour}:${minute}`;
   }
 
-  toDescription() {
-    let text = 'Hledat spojení';
+  toDescription({from, to, date}) {
+    let text;
 
     if (this.from && this.to) {
-      text += ` <match>${this.from}</match> – <match>${this.to}</match>`
+      text += `<match>${this.from}</match> – <match>${this.to}</match>`
     } else if (this.to) {
-      text += ` do <match>${this.to}</match>`
+      text += `<match>${this.to}</match>`
     }
 
     if (this.datetime) {
@@ -59,45 +71,27 @@ export default class IdosQuery {
     };
   }
 
-  isValid() {
-    return this.from && this.to && this.datetime instanceof Date;
-  }
+  
 
   async sanitize() {
     if (!this.from) {
-      this.from = await Location.getCity();
+      this.from = await Locator.getPosition();
     }
   
     if (!this.datetime) {
       this.datetime = new Date();
     }
   }
-
-  /*static async parse(text) {
-    const tokens = text.trim().split(/\s+/);
-    const query = tokens.join(' ')
-
-    console.log((await CityParser(query)).map(String))
-
-    const time = parseTime(tokens.slice(-1)[0] || '');
-    if (time) {
-      tokens.pop();
-    }
-
-    const date = parseDate(tokens.slice(-1)[0] || '');
-    if (date) {
-      tokens.pop();
-    }
-
-    if (date && time) {
-      date.setHours(time.hour);
-      date.setMinutes(time.minute);
-    }
-
-    const to = tokens.pop() || null;
-    const from = tokens.pop() || null;
-    const datetime = date;
-
-    return new IdosQuery({ from, to, datetime });
-  }*/
 }
+
+function validateResult({from, to, date}) {
+  return to.length > 0 && date instanceof Date;
+}
+
+function itemizeResult({from, to, date}) {
+  let fromCities = (from.length > 0) ? from : [null];
+  let toCities = (to.length > 0) ? to : [null];
+
+  return fromCities.map(from => toCities.map(to => ({ from, to, date }))).flat();
+}
+
