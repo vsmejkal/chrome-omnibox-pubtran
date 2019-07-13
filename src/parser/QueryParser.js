@@ -2,45 +2,53 @@ import parseDate from "./DateParser.js";
 import parseTime from "./TimeParser.js";
 import parseCities from "./CityParser.js";
 import StringUtil from "../StringUtil.js";
+import Result from "../data/Result.js";
+import Date from "../data/Date.js";
+import Time from "../data/Time.js";
+import QueryScanner from "./QueryScanner.js";
 
 
+/**
+ * Parses query from omnibox
+ * 
+ * @param {string} query Query text to process
+ * @returns {Promise<Result[]>}
+ */
 export default async function parseQuery(query) {
-  let result = {
-    from: [],
-    to: [],
-    date: new Date()
-  };
+  /*let r1 = new Result({
+    from: "Lanškroun",
+    to: "Brno",
+    description: "<match>Lan</match>škroun  ➡️  <match>Brno</match><dim> | neděle 18:00</dim>"
+  });
 
-  let scanner = Scanner(query);
-  
-  let from = await scanner.scan(parseCities);
-  if (from) {
-    result.from = from;
-  }
+  return [r1];*/
 
-  let to = await scanner.scan(parseCities);
-  if (to) {
-    result.to = to;
-  }
+  query = StringUtil.normalize(query);
 
+  let scanner = new QueryScanner(query);
+  let fromList = await scanner.scan(parseCities, []);
+  let toList = await scanner.scan(parseCities, []);
   let date = await scanner.scan(parseDate);
-  if (date) {
-    result.date.setFullYear(date.year, date.month - 1, date.day);
-  }
-
   let time = await scanner.scan(parseTime);
-  if (time) {
-    result.date.setHours(time.hour, time.minute, 0, 0);
-  }
   
-  if (result.to.length === 0) {
-    result.to = result.from;
-    result.from = [];
+  if (fromList.length === 0 && toList.length === 0) {
+    return [];
   }
 
-  return result;
-}
+  if (toList.length === 0) {
+    [fromList, toList] = [[null], fromList];
+  }
 
+  let results = [];
+  for (let from of fromList) {
+    for (let to of toList) {
+      results.push(new Result({ from, to, date, time }));
+    }
+  }
+
+  return results;
+}
+/*
 function Scanner(text) {
   let tokens = StringUtil.normalize(text).split(/\s+/);
   let start = 0, end;
@@ -50,7 +58,7 @@ function Scanner(text) {
       let result = null;
 
       for (end = start + 1; end <= tokens.length; end++) {
-        let phrase = tokens.slice(start, end).join(' ');
+        let phrase = tokens.slice(start, end).join(" ");
         let value = await parseResult(phrase);
 
         if (value && !isEmptyArray(value)) {
@@ -69,3 +77,4 @@ function Scanner(text) {
 function isEmptyArray(array) {
   return Array.isArray(array) && array.length === 0;
 }
+*/

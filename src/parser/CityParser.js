@@ -1,5 +1,5 @@
-import City from '../City.js';
-import { parseHumanDate } from './DateParser.js';
+import CityDatabase from "../CityDatabase.js";
+import { parseHumanDate } from "./DateParser.js";
 
 export default async function parseCities(query) {
     // Limit number of results at the beginning
@@ -7,12 +7,12 @@ export default async function parseCities(query) {
         return [];
     }
 
-    // Ignore if it's a day of week
+    // Ignore the city name matches a day of week
     if (!isCapitalized(query) && parseHumanDate(query)) {
         return [];
     }
 
-    return City.search(query)
+    return CityDatabase.search(query)
 }
 
 function isCapitalized(string) {

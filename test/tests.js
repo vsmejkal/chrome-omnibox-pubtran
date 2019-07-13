@@ -15,8 +15,8 @@ runTests({
 async function runTests(testSuites) {
   for (let suiteName in testSuites) {
     for (let testName in testSuites[suiteName]) {
-      const test = testSuites[suiteName][testName];
-      const result = await executeTest(test);
+      let test = testSuites[suiteName][testName];
+      let result = await executeTest(test);
 
       printResult(suiteName, testName, result);
     }

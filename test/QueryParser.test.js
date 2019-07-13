@@ -2,36 +2,37 @@ import parseQuery from "../src/parser/QueryParser.js";
 
 export default {
   async city() {
-    const result = await parseQuery("výprachtice");
+    let results = await parseQuery("výprachtice");
 
-    return result.from.length === 0 && result.to[0].name === "Výprachtice";
+    return results[0].from === null && results[0].to.name === "Výprachtice";
   },
 
   async twoWordCity() {
-    const result = await parseQuery("česká třebová");
+    let results = await parseQuery("česká třebová");
 
-    return result.from.length === 0 && result.to[0].name === "Česká Třebová";
+    return results[0].from === null && results[0].to.name === "Česká Třebová";
   },
 
   async cityToCity() {
-    const result = await parseQuery("brno česká třebová");
+    let results = await parseQuery("brno česká třebová");
 
-    return result.from[0].name === "Brno" && result.to[0].name === "Česká Třebová";
+    return results[0].from.name === "Brno" && results[0].to.name === "Česká Třebová";
   },
 
   async partialCityName() {
-    const result = await parseQuery("brno suchdol");
+    let results = await parseQuery("brno suchdol");
 
-    return result.from[0].name === "Brno" &&
-           result.to.some(city => city.name === "Suchdol nad Odrou");
+    return results.every(r => r.from.name === "Brno") &&
+           results.some(r => r.to.name === "Suchdol nad Odrou");
   },
 
   async withHumanDate() {
-    const result = await parseQuery("lanškroun pátek večer");
+    let results = await parseQuery("lanškroun pátek večer");
+    let result = results[0];
 
-    return result.from.length === 0 &&
-           result.to[0].name === "Lanškroun" &&
-           result.date.getDay() === 5 &&
-           result.date.getHours() >= 16;
+    return result.from === null &&
+           result.to.name === "Lanškroun" &&
+           result.date.dayOfWeek === 5 &&
+           result.time.hour >= 16;
   }
 };

@@ -1,35 +1,35 @@
+import Time from "../data/Time.js";
+
 export default async function parseTime(query) {
-  return parseRelativeTime(query) || parseNumericTime(query);
+  console.log("parseTime:", query)
+
+  var time = parseRelativeTime(query) || parseNumericTime(query);
+
+  return (time && time.isValid) ? time : null;
 }
 
 function parseRelativeTime(query) {
   switch (query) {
-    case 'rano':
-      return { hour: 6, minute: 0 };
-    case 'dopoledne':
-      return { hour: 8, minute: 0 };
-    case 'odpoledne':
-      return { hour: 12, minute: 0 };
-    case 'vecer':
-      return { hour: 16, minute: 0 };
-    default:
-      return null;
+    case "rano":
+      return new Time({ hour: 6, minute: 0 });
+    case "dopoledne":
+      return new Time({ hour: 8, minute: 0 });
+    case "odpoledne":
+      return new Time({ hour: 12, minute: 0 });
+    case "vecer":
+      return new Time({ hour: 16, minute: 0 });
   }
 }
 
 function parseNumericTime(query) {
-  const pattern = /^(?:ve?\s)?(\d\d?)(?:\:(\d\d))?\s?(?:h|hod|hodin)?$/
-  const match = query.match(pattern);
+  let pattern = /^(?:ve?\s)?(\d\d?)(?:\:(\d\d))?\s?(?:h|hod|hodin)?$/
+  let match = query.match(pattern);
   if (!match) {
     return null;
   }
 
-  const hour = parseInt(match[1]);
-  const minute = parseInt(match[2]) || 0;
+  let hour = parseInt(match[1]);
+  let minute = parseInt(match[2]) || 0;
 
-  if (hour > 23 || minute > 59) {
-    return null;
-  }
-
-  return { hour, minute };
+  return new Time({ hour, minute });
 }
