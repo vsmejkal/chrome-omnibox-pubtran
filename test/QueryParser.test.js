@@ -27,7 +27,7 @@ export default {
   },
 
   async withHumanDate() {
-    let results = await parseQuery("lanškroun pátek večer");
+    let results = await parseQuery("lanškroun v pátek večer");
     let result = results[0];
 
     return result.from === null &&

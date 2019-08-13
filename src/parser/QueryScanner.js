@@ -15,22 +15,24 @@ export default class QueryScanner {
   async scan(parser, result = null) {
     for (this.end = this.start + 1; this.end <= this.tokens.length; this.end++) {
       let phrase = this.tokens.slice(this.start, this.end).join(" ");
-      let newResult = await parser(phrase);
+      let value = await parser(phrase);
 
-      if (isTruthy(newResult)) {
-        result = newResult;
-      } else {
+      if (isNotEmpty(value)) {
+        result = value;
+      } else if (isNotEmpty(result)) {
         break;
       }
     }
 
-    this.start = this.end - 1;
+    if (isNotEmpty(result)) {
+      this.start = this.end - 1;
+    }
 
     return result;
   }
 }
 
-function isTruthy(value) {
+function isNotEmpty(value) {
   if (Array.isArray(value)) {
     return value.length > 0;
   }
