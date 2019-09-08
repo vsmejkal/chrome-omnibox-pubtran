@@ -1,4 +1,4 @@
-import parseDate from "../src/parser/DateParser.js";
+import parseDate from "/src/parser/DateParser.js";
 
 export default {
   async today() {

@@ -1,4 +1,4 @@
-import Time from "../data/Time.js";
+import Time from "/src/model/Time.js";
 
 export default async function parseTime(query) {
   console.log("parseTime:", query)

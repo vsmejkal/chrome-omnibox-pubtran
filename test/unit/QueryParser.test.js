@@ -1,4 +1,4 @@
-import parseQuery from "../src/parser/QueryParser.js";
+import parseQuery from "/src/parser/QueryParser.js";
 
 export default {
   async city() {

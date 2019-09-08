@@ -1,4 +1,4 @@
-import StringUtil from "../StringUtil.js";
+import StringUtil from "/src/StringUtil.js";
 
 export default class City {
   /**
@@ -13,28 +13,30 @@ export default class City {
     this.name = name;
     this.area = area;
     this.position = position;
-
-    this._ascii = " " + StringUtil.normalize(name);
+    this.asciiName = StringUtil.normalize(name);
   }
 
   /**
    * Matches the city against query
    * 
-   * @param {string} query Normalized query in ASCII
+   * @param {string} query Normalized string query
    */
   match(query) {
-    let pattern = " " + query;
-    let index = this._ascii.indexOf(pattern);
-    if (index < 0) return null;
+    // let pattern = " " + query;
+    // let index = this._ascii.indexOf(pattern);
+    // if (index < 0) return null;
 
-    let offset = index - 1;
-    let length = query.length;
-    let coverage = length / parseFloat(this.name.length);
+    if (!this.asciiName.startsWith(query)) {
+      return 0;
+    }
+
+    let offset = 0;
+    let coverage = query.length / parseFloat(this.name.length);
     let position = offset === 0 ? 1 : 0;
     let capital = this.area.startsWith(this.name) ? 1 : 0;
     let score = coverage + position + capital;
 
-    return { score, offset, length };
+    return score;
   }
   
   distanceTo(position) {

@@ -1,15 +1,15 @@
-import parseQuery from "./parser/QueryParser.js";
-import ParserError from "./data/ParserError.js";
-import Locator from "./Locator.js";
-import CityDatabase from "./CityDatabase.js";
-import Time from "./data/Time.js";
+import parseQuery from "/src/parser/QueryParser.js";
+import ParserError from "/src/model/ParserError.js";
+import Locator from "/src/Locator.js";
+import Database from "/src/Database.js";
+import Time from "/src/model/Time.js";
 
 chrome.browserAction.onClicked.addListener((tab) =>  {
   chrome.runtime.reload();
 });
 
 chrome.omnibox.onInputStarted.addListener(() => {
-  CityDatabase.getCities();
+  Database.loadCities();
 });
 
 chrome.omnibox.onInputChanged.addListener(async (text, suggest) => {
@@ -54,7 +54,7 @@ function setDefaultSuggestion(description) {
 async function getResultUrl(result) {
   if (!result.from) {
     let position = await Locator.getCurrentPosition();
-    let nearestCity = await CityDatabase.findNearest(position);
+    let nearestCity = await Database.findNearest(position);
     result.from = nearestCity;
   }
 

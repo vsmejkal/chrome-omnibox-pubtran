@@ -1,4 +1,4 @@
-import StringUtil from "../StringUtil.js";
+import StringUtil from "/src/StringUtil.js";
 
 export default class QueryScanner {
   /**

@@ -1,4 +1,4 @@
-import Date from "../data/Date.js";
+import Date from "/src/model/Date.js";
 
 let DAY = 24 * 60 * 60 * 1000;
 

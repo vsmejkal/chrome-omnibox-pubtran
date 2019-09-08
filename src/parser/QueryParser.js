@@ -1,11 +1,9 @@
-import parseDate from "./DateParser.js";
-import parseTime from "./TimeParser.js";
-import parseCities from "./CityParser.js";
-import StringUtil from "../StringUtil.js";
-import Result from "../data/Result.js";
-import Date from "../data/Date.js";
-import Time from "../data/Time.js";
-import QueryScanner from "./QueryScanner.js";
+import parseDate from "/src/parser/DateParser.js";
+import parseTime from "/src/parser/TimeParser.js";
+import parseCities from "/src/parser/CityParser.js";
+import StringUtil from "/src/StringUtil.js";
+import Result from "/src/model/Result.js";
+import QueryScanner from "/src/parser/QueryScanner.js";
 
 
 /**

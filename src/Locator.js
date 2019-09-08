@@ -1,4 +1,4 @@
-import Position from "./data/Position.js";
+import Position from "/src/model/Position.js";
 
 let cachedPosition = {
   _value: null,

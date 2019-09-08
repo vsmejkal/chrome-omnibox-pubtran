@@ -1,4 +1,4 @@
-import parseTime from "../src/parser/TimeParser.js";
+import parseTime from "/src/parser/TimeParser.js";
 
 export default {
   async hours() {
