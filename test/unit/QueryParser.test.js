@@ -1,4 +1,5 @@
 import parseQuery from "/src/parser/QueryParser.js";
+import TransportType from "/src/model/TransportType.js";
 
 export default {
   async city() {
@@ -34,5 +35,14 @@ export default {
            result.to.name === "Lanškroun" &&
            result.date.dayOfWeek === 5 &&
            result.time.hour >= 16;
+  },
+
+  async onlyBus() {
+    let results = await parseQuery("bus nový jičín")
+    let result = results[0];
+
+    return result.from === null &&
+           result.to.name === "Nový Jičín" &&
+           result.type === TransportType.BUS;
   }
 };

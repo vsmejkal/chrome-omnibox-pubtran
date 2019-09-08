@@ -1,3 +1,5 @@
+import TransportType from "/src/model/TransportType.js";
+
 export default class Result {
   /**
    * Result produced by QueryParser.
@@ -7,19 +9,18 @@ export default class Result {
    * @param {City} params.to
    * @param {Date} params.date
    * @param {Time} params.time
+   * @param {TransportType} params.type
    */
-  constructor ({ from, to, date, time }) {
+  constructor ({ from, to, date, time, type }) {
     this.from = from;
     this.to = to;
     this.date = date;
     this.time = time;
+    this.type = type || TransportType.ALL;
   }
 
   toUrl() {
-    let url = "https://jizdnirady.idnes.cz/vlakyautobusy/spojeni/"
-      + "?submit=true"
-      + "&lng=CZECH"
-      + "&akce=vlakyautobusy";
+    let url = `https://jizdnirady.idnes.cz/${this.type}/spojeni/?submit=true&lng=CZECH`;
 
     if (this.from) {
       url += "&f=" + this.from.toString();

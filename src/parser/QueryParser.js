@@ -3,27 +3,20 @@ import parseTime from "/src/parser/TimeParser.js";
 import parseCities from "/src/parser/CityParser.js";
 import StringUtil from "/src/StringUtil.js";
 import Result from "/src/model/Result.js";
+import TransportType from "/src/model/TransportType.js";
 import QueryScanner from "/src/parser/QueryScanner.js";
 
 
 /**
- * Parses query from omnibox
- * 
- * @param {string} query Query text to process
+ * Parse query from omnibox
+ * @param {string} query
  * @returns {Promise<Result[]>}
  */
 export default async function parseQuery(query) {
-  /*let r1 = new Result({
-    from: "Lanškroun",
-    to: "Brno",
-    description: "<match>Lan</match>škroun  ➡️  <match>Brno</match><dim> | neděle 18:00</dim>"
-  });
-
-  return [r1];*/
-
   query = StringUtil.normalize(query);
 
   let scanner = new QueryScanner(query);
+  let type = await scanner.scan(parseTransportType);
   let fromList = await scanner.scan(parseCities, []);
   let toList = await scanner.scan(parseCities, []);
   let date = await scanner.scan(parseDate);
@@ -40,39 +33,23 @@ export default async function parseQuery(query) {
   let results = [];
   for (let from of fromList) {
     for (let to of toList) {
-      results.push(new Result({ from, to, date, time }));
+      results.push(new Result({ from, to, date, time, type }));
     }
   }
 
   return results;
 }
-/*
-function Scanner(text) {
-  let tokens = StringUtil.normalize(text).split(/\s+/);
-  let start = 0, end;
 
-  return {
-    async scan(parseResult) {
-      let result = null;
+function parseTransportType(query) {
+  switch (query) {
+    case "autobus":
+    case "bus":
+      return TransportType.BUS;
 
-      for (end = start + 1; end <= tokens.length; end++) {
-        let phrase = tokens.slice(start, end).join(" ");
-        let value = await parseResult(phrase);
+    case "vlak":
+      return TransportType.TRAIN;
 
-        if (value && !isEmptyArray(value)) {
-          result = value;
-        } else {
-          break;
-        }
-      }
-
-      start = end - 1;
-      return result;
-    }
-  };
+    default:
+      return null;
+  }
 }
-
-function isEmptyArray(array) {
-  return Array.isArray(array) && array.length === 0;
-}
-*/
