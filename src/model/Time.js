@@ -32,4 +32,8 @@ export default class Time {
 
     return `${hour}:${minute}`;
   }
+
+  toHumanString() {
+    return this.toString()
+  }
 }

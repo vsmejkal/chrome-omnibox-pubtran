@@ -6,14 +6,25 @@ export default class City {
    * @param {number} params.id
    * @param {string} params.name
    * @param {string} params.area
-   * @param {Position} params.position
+   * @param {Gps} params.gps
    */
-  constructor({ id, name, area, position }) {
+  constructor({ id, name, area, gps }) {
     this.id = id;
     this.name = name;
     this.area = area;
-    this.position = position;
-    this.asciiName = StringUtil.normalize(name);
+    this.gps = gps;
+    this.asciiValue = this.getAsciiValue();
+    
+    this._showArea = false;
+  }
+
+  get showArea() {
+    return this._showArea;
+  }
+
+  set showArea(show) {
+    this._showArea = show;
+    this.asciiValue = this.getAsciiValue();
   }
 
   /**
@@ -26,7 +37,7 @@ export default class City {
     // let index = this._ascii.indexOf(pattern);
     // if (index < 0) return null;
 
-    if (!this.asciiName.startsWith(query)) {
+    if (!this.asciiValue.startsWith(query)) {
       return 0;
     }
 
@@ -39,11 +50,19 @@ export default class City {
     return score;
   }
   
-  distanceTo(position) {
-    return this.position.distanceTo(position);
+  distanceTo(gps) {
+    return this.gps.distanceTo(gps);
+  }
+
+  getAsciiValue() {
+    return StringUtil.normalize(this.toString())
   }
 
   toString() {
-    return `${this.name}`;
+    if (this._showArea) {
+      return `${this.name} (${this.area})`;
+    } else {
+      return this.name;
+    }
   }
 }

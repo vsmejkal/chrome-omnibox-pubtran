@@ -2,9 +2,7 @@ import Config from "/src/Config.js";
 import StringUtil from "/src/StringUtil.js";
 import Locator from "/src/Locator.js";
 import City from "/src/model/City.js";
-import Position from "/src/model/Position.js";
-
-let $cities = null;
+import Gps from "/src/model/Gps.js";
 
 export default {
   cities: null,
@@ -20,16 +18,14 @@ export default {
 
     this.cities = parseCsv(data);
     this.index = buildIndex(this.cities);
+    postprocessData(this.index);
 
     function parseCsv(data) {
       return data.split("\n").filter(StringUtil.isNotEmpty).slice(1).map((line, id) => {
         let [name, area, latitude, longitude] = line.split(",");
-        let position = new Position({
-          latitude: parseFloat(latitude),
-          longitude: parseFloat(longitude)
-        });
+        let gps = new Gps(parseFloat(latitude), parseFloat(longitude));
   
-        return new City({id, name, area, position});
+        return new City({id, name, area, gps});
       });
     }
 
@@ -37,7 +33,7 @@ export default {
       let index = new Map();
 
       cities.forEach((city) => {
-        let prefix = city.asciiName.slice(0, 2);
+        let prefix = city.asciiValue.slice(0, 2);
         if (index.has(prefix)) {
           index.get(prefix).push(city);
         } else {
@@ -47,14 +43,27 @@ export default {
 
       return index;
     }
+
+    function postprocessData(index) {
+      for (let cities of index.values()) {
+        cities.forEach((city, i) => {
+          let prevCity = cities[i - 1] || {};
+          let nextCity = cities[i + 1] || {};
+
+          if (city.name === prevCity.name || city.name === nextCity.name) {
+            city.showArea = true;
+          }
+        });
+      }
+    }
   },
 
-  async findNearest(position) {
+  async findNearest(gps) {
     if (!this.cities) {
       await this.loadCities();
     }
 
-    let dists = this.cities.map(city => city.distanceTo(position));
+    let dists = this.cities.map(city => city.distanceTo(gps));
 
     return this.cities.reduce((cityA, cityB) =>
       dists[cityA.id] < dists[cityB.id] ? cityA : cityB

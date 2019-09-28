@@ -44,4 +44,10 @@ export default class Date {
   toString() {
     return `${this.day}.${this.month}.${this.year}`;
   }
+
+  toHumanString() {
+    const options = { weekday: 'long', day: 'numeric', month: 'long' };
+    
+    return this.toNative().toLocaleDateString(undefined, options);
+  }
 }

@@ -1,4 +1,4 @@
-import Position from "/src/model/Position.js";
+import Gps from "/src/model/Gps.js";
 
 let cachedPosition = {
   _value: null,
@@ -22,7 +22,7 @@ export default {
   async fetchPosition() {
     return new Promise((resolve, reject) => {
       let onSuccess = ({ coords }) => {
-        resolve(new Position(coords));
+        resolve(new Gps(coords.latitude, coords.longitude));
       };
 
       let onError = (error) => {
@@ -40,7 +40,7 @@ export default {
   },
 
   /**
-   * @returns {Promise<Position>}
+   * @returns {Promise<Gps>}
    */
   async getCurrentPosition() {
     if (!cachedPosition.isFresh) {

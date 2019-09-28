@@ -1,10 +1,10 @@
-export default class Position {
+export default class Gps {
   /**
    * @param {Object} params
    * @param {number} params.latitude
    * @param {number} params.longitude
    */
-  constructor({ latitude, longitude } = {}) {
+  constructor(latitude, longitude) {
     this.latitude = latitude;
     this.longitude = longitude;
   }
@@ -12,7 +12,7 @@ export default class Position {
   /**
    * Squared Euclidean distance to other position
    * 
-   * @param {Position} other
+   * @param {Gps} other
    */
   distanceTo(other) {
     let dLat = this.latitude - other.latitude;
