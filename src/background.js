@@ -4,8 +4,8 @@ import Locator from "/src/Locator.js";
 import Database from "/src/Database.js";
 import Time from "/src/model/Time.js";
 
-chrome.browserAction.onClicked.addListener((tab) =>  {
-  chrome.runtime.reload();
+chrome.browserAction.onClicked.addListener(() =>  {
+  chrome.tabs.create({ url: "https://idos.idnes.cz/vlakyautobusy/spojeni/#col-content" });
 });
 
 chrome.omnibox.onInputStarted.addListener(() => {
