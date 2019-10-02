@@ -1,9 +1,10 @@
 import StringUtil from "/src/StringUtil.js";
 
+/**
+ * Process text query by joining tokens
+ */
 export default class QueryScanner {
   /**
-   * Process text query by joining tokens
-   * 
    * @param {string} query
    */
   constructor(query) {
@@ -17,14 +18,14 @@ export default class QueryScanner {
       let phrase = this.tokens.slice(this.start, this.end).join(" ");
       let value = await parser(phrase);
 
-      if (isNotEmpty(value)) {
+      if (isTruthy(value)) {
         result = value;
-      } else if (isNotEmpty(result)) {
+      } else if (isTruthy(result)) {
         break;
       }
     }
 
-    if (isNotEmpty(result)) {
+    if (isTruthy(result)) {
       this.start = this.end - 1;
     }
 
@@ -32,7 +33,7 @@ export default class QueryScanner {
   }
 }
 
-function isNotEmpty(value) {
+function isTruthy(value) {
   if (Array.isArray(value)) {
     return value.length > 0;
   }

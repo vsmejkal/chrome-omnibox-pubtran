@@ -14,7 +14,6 @@ export default class City {
     this.area = area;
     this.gps = gps;
     this.asciiValue = this.getAsciiValue();
-    
     this._showArea = false;
   }
 
@@ -28,26 +27,11 @@ export default class City {
   }
 
   /**
-   * Matches the city against query
-   * 
    * @param {string} query Normalized string query
+   * @returns {boolean} If the city matches the query
    */
   match(query) {
-    // let pattern = " " + query;
-    // let index = this._ascii.indexOf(pattern);
-    // if (index < 0) return null;
-
-    if (!this.asciiValue.startsWith(query)) {
-      return 0;
-    }
-
-    let offset = 0;
-    let coverage = query.length / parseFloat(this.name.length);
-    let position = offset === 0 ? 1 : 0;
-    let capital = this.area.startsWith(this.name) ? 1 : 0;
-    let score = coverage + position + capital;
-
-    return score;
+    return this.asciiValue.startsWith(query);
   }
   
   distanceTo(gps) {

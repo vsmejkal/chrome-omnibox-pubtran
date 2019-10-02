@@ -1,7 +1,7 @@
 import parseQuery from "/src/parser/QueryParser.js";
-import ParserError from "/src/model/ParserError.js";
 import Locator from "/src/Locator.js";
 import Database from "/src/Database.js";
+import History from "/src/History.js";
 import Time from "/src/model/Time.js";
 
 chrome.browserAction.onClicked.addListener(() =>  {
@@ -15,17 +15,11 @@ chrome.omnibox.onInputStarted.addListener(() => {
 chrome.omnibox.onInputChanged.addListener(async (text, suggest) => {
   let results = [];
 
-  console.log('Input changed');
-
   try {
     results = await parseQuery(text);
   } catch (error) {
-    if (error instanceof ParserError) {
-      // setDefaultSuggestion(error.message);
-      return;
-    } else {
-      throw error;
-    }
+    console.error(error);
+    return;
   }
 
   if (results.length > 0) {
@@ -36,17 +30,15 @@ chrome.omnibox.onInputChanged.addListener(async (text, suggest) => {
     setDefaultSuggestion(`<dim>Kam chcete jet?</dim>`);
   }
 
-  suggest(results.map((result) => ({
-    content: result.toQuery(),
-    description: result.toDescription()
-  })));
+  suggestResults(suggest, results);
 });
 
 chrome.omnibox.onInputEntered.addListener(async (text, disposition) => {
   let results = await parseQuery(text);
 
   if (results.length > 0) {
-    let result = await sanitizeResult(results[0]);
+    let result = await completeResult(results[0]);
+    History.saveResult(result);
 
     openPage(result.toUrl(), disposition);
   }
@@ -58,7 +50,16 @@ function setDefaultSuggestion(description) {
   chrome.omnibox.setDefaultSuggestion({ description });
 }
 
-async function sanitizeResult(result) {
+function suggestResults(suggest, results) {
+  let suggestions = results.map((result) => ({
+    content: result.toQuery(),
+    description: result.toDescription()
+  }));
+
+  suggest(suggestions);
+}
+
+async function completeResult(result) {
   if (!result.from) {
     let gps = await Locator.getCurrentPosition();
     let nearestCity = await Database.findNearest(gps);

@@ -1,6 +1,6 @@
 import Config from "/src/Config.js";
 import StringUtil from "/src/StringUtil.js";
-import Locator from "/src/Locator.js";
+import History from "/src/History.js";
 import City from "/src/model/City.js";
 import Gps from "/src/model/Gps.js";
 
@@ -9,7 +9,7 @@ export default {
   index: null,
   
   async loadCities() {
-    console.log('loadCities');
+    console.debug('loadCities');
 
     let dataset = Config.CITY_DATASET;
     let url = chrome.runtime.getURL(dataset);
@@ -81,11 +81,36 @@ export default {
       return [];
     }
 
+    let hits = await History.getHits(cities);
+    let scores = new Map();
+
+    cities.forEach((city, index) => 
+      scores.set(city, getScore(city, hits[index]))
+    );
+
     return cities
-      .map((city) => ({ city, score: city.match(query) }))
-      .filter(({ score }) => score > 0)
-      .sort(({ score: scoreA }, { score: scoreB }) => scoreB - scoreA)
-      .slice(0, limit)
-      .map(({ city }) => city);
+      .filter(city => scores.get(city) >= 0)
+      .sort((city1, city2) => scores.get(city2) - scores.get(city1))
+      .slice(0, limit);
+
+    function getScore(city, hits) {
+      if (!city.match(query)) {
+        return -1;
+      }
+
+      let score = hits;
+
+      // If the query matches the whole city name, prioritize it
+      if (query.length >= city.name.length) {
+        score += 10000;
+      }
+  
+      // Favor district towns
+      if (city.area.startsWith(city.name)) {
+        score += 10;
+      }
+
+      return score;
+    }
   }
 }

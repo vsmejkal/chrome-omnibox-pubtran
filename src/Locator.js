@@ -20,17 +20,13 @@ let cachedPosition = {
 
 export default {
   async fetchPosition() {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       let onSuccess = ({ coords }) => {
         resolve(new Gps(coords.latitude, coords.longitude));
       };
 
       let onError = (error) => {
-        if (cachedPosition.value) {
-          resolve(cachedPosition.value);
-        } else {
-          reject(error);
-        }
+        resolve(cachedPosition.value);
       };
       
       let options = { timeout: 1000 };
