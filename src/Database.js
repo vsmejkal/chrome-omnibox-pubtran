@@ -33,11 +33,13 @@ export default {
       let index = new Map();
 
       cities.forEach((city) => {
-        let prefix = city.asciiValue.slice(0, 2);
-        if (index.has(prefix)) {
-          index.get(prefix).push(city);
-        } else {
-          index.set(prefix, [city]);
+        for (let i = 1; i <= 2; i++) {
+          let prefix = city.asciiValue.slice(0, i);
+          if (index.has(prefix)) {
+            index.get(prefix).push(city);
+          } else {
+            index.set(prefix, [city]);
+          }
         }
       });
 
@@ -107,7 +109,7 @@ export default {
   
       // Favor district towns
       if (city.area.startsWith(city.name)) {
-        score += 10;
+        score += 1;
       }
 
       return score;
