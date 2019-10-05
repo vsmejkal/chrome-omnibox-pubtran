@@ -1,55 +1,54 @@
+import parseTransportType from "/src/parser/TransportTypeParser.js";
+import parseCities from "/src/parser/CityParser.js";
 import parseDate from "/src/parser/DateParser.js";
 import parseTime from "/src/parser/TimeParser.js";
-import parseCities from "/src/parser/CityParser.js";
-import StringUtil from "/src/StringUtil.js";
 import Result from "/src/model/Result.js";
-import TransportType from "/src/model/TransportType.js";
 import QueryScanner from "/src/parser/QueryScanner.js";
 
+/**
+ * @typedef {object} ParserResult
+ * @property {Result[]} items
+ * @property {string?} notFound
+ * 
+ */
 
 /**
- * Parse query from omnibox
+ * Parse query from omnibox and return Result[] on success.
  * @param {string} query
- * @returns {Promise<Result[]>}
+ * @returns {Promise<ParserResult>}
  */
 export default async function parseQuery(query) {
-  query = StringUtil.normalize(query);
+  query = query.trim();
 
   let scanner = new QueryScanner(query);
-  let type = await scanner.scan(parseTransportType);
+  let transportType = await scanner.scan(parseTransportType);
   let fromList = await scanner.scan(parseCities, []);
   let toList = await scanner.scan(parseCities, []);
   let date = await scanner.scan(parseDate);
   let time = await scanner.scan(parseTime);
+
+  if (!scanner.isFinished()) {
+    return {notFound: scanner.getUnprocessedPart()};
+  }
   
-  if (fromList.length === 0 && toList.length === 0) {
-    return [];
+  if (fromList.length === 0) {
+    fromList = [null];
   }
 
   if (toList.length === 0) {
     [fromList, toList] = [[null], fromList];
   }
 
-  let results = [];
+  if (!transportType && !toList[0]) {
+    return {items: []};
+  }
+
+  let items = [];
   for (let from of fromList) {
     for (let to of toList) {
-      results.push(new Result({ from, to, date, time, type }));
+      items.push(new Result({ from, to, date, time, transportType }));
     }
   }
 
-  return results;
-}
-
-function parseTransportType(query) {
-  switch (query) {
-    case "autobus":
-    case "bus":
-      return TransportType.BUS;
-
-    case "vlak":
-      return TransportType.TRAIN;
-
-    default:
-      return null;
-  }
+  return {items};
 }

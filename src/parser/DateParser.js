@@ -1,8 +1,11 @@
 import Date from "/src/model/Date.js";
+import StringUtil from "/src/StringUtil.js";
 
 let DAY = 24 * 60 * 60 * 1000;
 
 export default async function parseDate(query) {
+  query = StringUtil.normalize(query);
+
   let date = parseHumanDate(query) || parseNumericDate(query);
 
   return (date && date.isValid) ? date : null;

@@ -10,41 +10,44 @@ chrome.browserAction.onClicked.addListener(() =>  {
 
 chrome.omnibox.onInputStarted.addListener(() => {
   Database.loadCities();
+  setDefaultSuggestion(`<dim>Hledat spojení do …</dim>`);
 });
 
 chrome.omnibox.onInputChanged.addListener(async (text, suggest) => {
-  let results = [];
+  let result;
 
   try {
-    results = await parseQuery(text);
+    result = await parseQuery(text);
   } catch (error) {
     console.error(error);
     return;
   }
 
-  if (results.length > 0) {
-    setDefaultSuggestion(results.shift().toDescription());
-  } else if (text.length > 1) {
-    setDefaultSuggestion(`Místo <match>${text}</match> nebylo nalezeno`);
+  let {items = [], notFound} = result;
+
+  if (items.length > 0) {
+    setDefaultSuggestion(items.shift().toDescription());
+  } else if (notFound) {
+    setDefaultSuggestion(`Místo <match>${notFound}</match> nebylo nalezeno`);
   } else {
-    setDefaultSuggestion(`<dim>Kam chcete jet?</dim>`);
+    setDefaultSuggestion(`Hledat spojení do <dim>…</dim>`);
   }
 
-  suggestResults(suggest, results);
+  suggestResults(suggest, items);
 });
 
 chrome.omnibox.onInputEntered.addListener(async (text, disposition) => {
-  let results = await parseQuery(text);
+  let {items} = await parseQuery(text);
 
-  if (results.length > 0) {
-    let result = await completeResult(results[0]);
+  if (items.length > 0) {
+    let result = await completeResult(items[0]);
     History.saveResult(result);
 
     openPage(result.toUrl(), disposition);
   }
 });
 
-// ----------------------------------------------------------------------
+// ===========================================================================
 
 function setDefaultSuggestion(description) {
   chrome.omnibox.setDefaultSuggestion({ description });

@@ -1,6 +1,9 @@
 import Time from "/src/model/Time.js";
+import StringUtil from "/src/StringUtil.js";
 
 export default async function parseTime(query) {
+  query = StringUtil.normalize(query);
+
   var time = parseRelativeTime(query) || parseNumericTime(query);
 
   return (time && time.isValid) ? time : null;

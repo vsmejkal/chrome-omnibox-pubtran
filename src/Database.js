@@ -1,8 +1,8 @@
 import Config from "/src/Config.js";
-import StringUtil from "/src/StringUtil.js";
 import History from "/src/History.js";
 import City from "/src/model/City.js";
 import Gps from "/src/model/Gps.js";
+import StringUtil from "/src/StringUtil.js";
 
 export default {
   cities: null,
@@ -73,6 +73,8 @@ export default {
   },
 
   async search(query, limit = 10) {
+    query = StringUtil.normalize(query);
+
     if (!this.index) {
       await this.loadCities();
     }

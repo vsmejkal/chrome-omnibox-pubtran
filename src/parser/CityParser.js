@@ -2,12 +2,7 @@ import Database from "/src/Database.js";
 import { parseHumanDate } from "/src/parser/DateParser.js";
 
 export default async function parseCities(query) {
-    if (query.length < 1) {
-        return [];
-    }
-
-    // Ignore city names matching a day of week
-    if (!isCapitalized(query) && parseHumanDate(query)) {
+    if (query.length === 0 || isDayOfWeek(query)) {
         return [];
     }
 
@@ -20,6 +15,6 @@ export default async function parseCities(query) {
     return cities;
 }
 
-function isCapitalized(string) {
-    return string[0] === string[0].toUpperCase();
+function isDayOfWeek(string) {
+    return string[0] === string[0].toLowerCase() && parseHumanDate(string);
 }

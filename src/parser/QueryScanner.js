@@ -8,7 +8,7 @@ export default class QueryScanner {
    * @param {string} query
    */
   constructor(query) {
-    this.tokens = StringUtil.normalize(query).split(/\s+/);
+    this.tokens = query.split(/\s+/);
     this.start = 0;
     this.end = 1;
   }
@@ -30,6 +30,14 @@ export default class QueryScanner {
     }
 
     return result;
+  }
+
+  isFinished() {
+    return this.start === this.tokens.length;
+  }
+
+  getUnprocessedPart() {
+    return this.tokens.slice(this.start).join(" ")
   }
 }
 
