@@ -73,13 +73,16 @@ export default {
   },
 
   async search(query, limit = 10) {
-    query = StringUtil.normalize(query);
+    query = query.trim().toLowerCase();
+
+    let asciiQuery = StringUtil.normalize(query);
+    let asciiMode = query === asciiQuery;
 
     if (!this.index) {
       await this.loadCities();
     }
 
-    let prefix = query.slice(0, 2);
+    let prefix = asciiQuery.slice(0, 2).trim();
     let cities = this.index.get(prefix);
     if (!cities) {
       return [];
@@ -93,13 +96,13 @@ export default {
     );
 
     return cities
-      .filter(city => scores.get(city) >= 0)
+      .filter(city => scores.get(city) > 0)
       .sort((city1, city2) => scores.get(city2) - scores.get(city1))
       .slice(0, limit);
 
     function getScore(city, hits) {
-      if (!city.match(query)) {
-        return -1;
+      if (!city.match(query, asciiMode)) {
+        return 0;
       }
 
       let score = hits;
@@ -114,7 +117,7 @@ export default {
         score += 1;
       }
 
-      return score;
+      return 1 + score;
     }
   }
 }

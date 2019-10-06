@@ -13,8 +13,23 @@ export default class City {
     this.name = name;
     this.area = area;
     this.gps = gps;
-    this.asciiValue = this.getAsciiValue();
+    this._value = null;
+    this._asciiValue = null;
     this._showArea = false;
+  }
+
+  get value() {
+    if (!this._value) {
+      this._value = this.toString().toLowerCase();
+    }
+    return this._value;
+  }
+
+  get asciiValue() {
+    if (!this._asciiValue) {
+      this._asciiValue = StringUtil.normalize(this.value);
+    }
+    return this._asciiValue;
   }
 
   get showArea() {
@@ -23,23 +38,23 @@ export default class City {
 
   set showArea(show) {
     this._showArea = show;
-    this.asciiValue = this.getAsciiValue();
+    this._value = null;
+    this._asciiValue = null;
   }
 
   /**
-   * @param {string} query Normalized string query
-   * @returns {boolean} If the city matches the query
+   * @param {string} query Query string
+   * @param {boolean?} asciiMode True if the query should be matched against ASCII value
+   * @returns {boolean} True if the city matches the query
    */
-  match(query) {
-    return this.asciiValue.startsWith(query);
+  match(query, asciiMode = false) {
+    let value = (asciiMode) ? this.asciiValue : this.value;
+
+    return value.startsWith(query);
   }
   
   distanceTo(gps) {
     return this.gps.distanceTo(gps);
-  }
-
-  getAsciiValue() {
-    return StringUtil.normalize(this.toString())
   }
 
   toString() {
