@@ -49,8 +49,9 @@ export default class City {
    */
   match(query, asciiMode = false) {
     let value = (asciiMode) ? this.asciiValue : this.value;
+    let tokens = value.split(' ');
 
-    return value.startsWith(query);
+    return query.split(' ').every((prefix, i) => tokens[i] && tokens[i].startsWith(prefix));
   }
   
   distanceTo(gps) {
