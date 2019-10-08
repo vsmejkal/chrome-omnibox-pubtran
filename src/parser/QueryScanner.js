@@ -8,7 +8,7 @@ export default class QueryScanner {
    * @param {string} query
    */
   constructor(query) {
-    this.tokens = query.split(/\s+/);
+    this.tokens = query.trim().split(/\s+/);
     this.start = 0;
     this.end = 1;
   }

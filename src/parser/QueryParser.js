@@ -18,8 +18,6 @@ import QueryScanner from "/src/parser/QueryScanner.js";
  * @returns {Promise<ParserResult>}
  */
 export default async function parseQuery(query) {
-  query = query.trim();
-
   let scanner = new QueryScanner(query);
   let transportType = await scanner.scan(parseTransportType);
   let fromList = await scanner.scan(parseCities, []);
@@ -27,10 +25,6 @@ export default async function parseQuery(query) {
   let date = await scanner.scan(parseDate);
   let time = await scanner.scan(parseTime);
 
-  if (!scanner.isFinished()) {
-    return {notFound: scanner.getUnprocessedPart()};
-  }
-  
   if (fromList.length === 0) {
     fromList = [null];
   }
@@ -40,7 +34,7 @@ export default async function parseQuery(query) {
   }
 
   if (!transportType && !toList[0]) {
-    return {items: []};
+    return [];
   }
 
   let items = [];
@@ -50,5 +44,5 @@ export default async function parseQuery(query) {
     }
   }
 
-  return {items};
+  return items;
 }

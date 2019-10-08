@@ -14,21 +14,17 @@ chrome.omnibox.onInputStarted.addListener(() => {
 });
 
 chrome.omnibox.onInputChanged.addListener(async (text, suggest) => {
-  let result;
+  let items = [];
 
   try {
-    result = await parseQuery(text);
+    items = await parseQuery(text);
   } catch (error) {
     console.error(error);
     return;
   }
 
-  let {items = [], notFound} = result;
-
   if (items.length > 0) {
     setDefaultSuggestion(items.shift().toDescription());
-  } else if (notFound) {
-    setDefaultSuggestion(`Místo <match>${notFound}</match> nebylo nalezeno`);
   } else {
     setDefaultSuggestion(`Hledat spojení do <dim>…</dim>`);
   }
@@ -37,7 +33,7 @@ chrome.omnibox.onInputChanged.addListener(async (text, suggest) => {
 });
 
 chrome.omnibox.onInputEntered.addListener(async (text, disposition) => {
-  let {items} = await parseQuery(text);
+  let items = await parseQuery(text);
 
   if (items.length > 0) {
     let result = await completeResult(items[0]);
