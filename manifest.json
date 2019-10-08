@@ -1,7 +1,13 @@
 {
   "name": "Jízdní řády",
   "version": "1.0",
-  "description": "Vyhledávání autobusových a vlakových spojů přímo z adresního řádku.",
+  "description": "Rychlé vyhledávání autobusových a vlakových spojů z adresního řádku.",
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
   "omnibox": {
     "keyword" : "idos"
   },
