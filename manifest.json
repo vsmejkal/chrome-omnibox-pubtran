@@ -17,7 +17,7 @@
     "storage"
   ],
   "background": {
-    "page": "background.html",
+    "page": "src/background.html",
     "persistent": false
   },
   "web_accessible_resources": [

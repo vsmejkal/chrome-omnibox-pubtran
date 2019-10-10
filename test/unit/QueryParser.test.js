@@ -43,6 +43,6 @@ export default {
 
     return result.from === null &&
            result.to.name === "Nový Jičín" &&
-           result.type === TransportType.BUS;
+           result.transportType === TransportType.BUS;
   }
 };
