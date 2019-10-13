@@ -10,6 +10,7 @@ chrome.browserAction.onClicked.addListener(() =>  {
 
 chrome.omnibox.onInputStarted.addListener(() => {
   Database.loadCities();
+  Locator.getCurrentPosition();
   setDefaultSuggestion(`<dim>Hledat spojení do …</dim>`);
 });
 
@@ -59,8 +60,9 @@ function suggestResults(suggest, results) {
 }
 
 async function completeResult(result) {
-  if (!result.from) {
-    let gps = await Locator.getCurrentPosition();
+  let gps = await Locator.getCurrentPosition(3000);
+
+  if (!result.from && gps) {
     let nearestCity = await Database.findNearest(gps);
     result.from = nearestCity;
   }

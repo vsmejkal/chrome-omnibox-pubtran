@@ -13,23 +13,26 @@ let cachedPosition = {
   },
 
   set value (position) {
-    this._value = position;
-    this._stamp = new Date();
+    if (position) {
+      this._value = position;
+      this._stamp = new Date();
+    }
   }
 };
 
 export default {
-  async fetchPosition() {
+  async fetchPosition(timeout) {
     return new Promise((resolve) => {
       let onSuccess = ({ coords }) => {
         resolve(new Gps(coords.latitude, coords.longitude));
       };
 
       let onError = (error) => {
+        console.warn("Cannot get position:", error);
         resolve(cachedPosition.value);
       };
       
-      let options = { timeout: 1000 };
+      let options = { timeout };
 
       navigator.geolocation.getCurrentPosition(onSuccess, onError, options);
     });
@@ -38,9 +41,9 @@ export default {
   /**
    * @returns {Promise<Gps>}
    */
-  async getCurrentPosition() {
+  async getCurrentPosition(timeout = 3000) {
     if (!cachedPosition.isFresh) {
-      cachedPosition.value = await this.fetchPosition();
+      cachedPosition.value = await this.fetchPosition(timeout);
     }
 
     return cachedPosition.value;
