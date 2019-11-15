@@ -1,8 +1,7 @@
-## Hledání jízdních řádů z adresního řádku Chrome
+## Search Czech public transport connections from Chrome omnibox
 
-### Omezení:
-  - pouze pro vlaky a autobusy
-  - pouze pro ČR
+### Restrictions
+  - Searches only trains and buses in Czech Republic
 
-### Testování:
-  - otevřít chrome-extension://EXTENSION_ID/test/tests.html
+### Testing
+  - Open chrome-extension://EXTENSION_ID/test/tests.html
